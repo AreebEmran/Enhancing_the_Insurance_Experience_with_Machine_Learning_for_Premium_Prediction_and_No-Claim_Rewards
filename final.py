@@ -88,32 +88,32 @@ def train_classification_models(X_train, X_test, y_train, y_test):
 
 
 # STEP 8: Premium Range Prediction (Classification)
-print("🔷 Premium Range Prediction (Classification):")
+print("Premium Range Prediction (Classification):")
 X = df[features]
 y = df[target_premium_range]
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 premium_range_results = train_classification_models(X_train, X_test, y_train, y_test)
 best_premium_range = max(premium_range_results.items(), key=lambda x: x[1]['f1'])
 joblib.dump(best_premium_range[1]['model'], 'best_premium_range_model.pkl')
-print(f"\n✅ Best Premium Range Model: {best_premium_range[0]}")
+print(f"\n Best Premium Range Model: {best_premium_range[0]}")
 
 # STEP 9: Policy Type Prediction (Classification)
-print("\n🔷 Policy Type Prediction (Classification):")
+print("\n Policy Type Prediction (Classification):")
 y = df[target_policy]
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 policy_results = train_classification_models(X_train, X_test, y_train, y_test)
 best_policy = max(policy_results.items(), key=lambda x: x[1]['f1'])
 joblib.dump(best_policy[1]['model'], 'best_policy_model.pkl')
-print(f"\n✅ Best Policy Model: {best_policy[0]}")
+print(f"\n Best Policy Model: {best_policy[0]}")
 
 # STEP 10: No-Claim Vault Eligibility Prediction (Classification)
-print("\n🔷 No-Claim Vault Eligibility Prediction (Classification):")
+print("\n No-Claim Vault Eligibility Prediction (Classification):")
 y = df[target_vault]
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 vault_results = train_classification_models(X_train, X_test, y_train, y_test)
 best_vault = max(vault_results.items(), key=lambda x: x[1]['f1'])
 joblib.dump(best_vault[1]['model'], 'best_vault_model.pkl')
-print(f"\n✅ Best Vault Model: {best_vault[0]}")
+print(f"\n Best Vault Model: {best_vault[0]}")
 
 import joblib
 import time
@@ -205,14 +205,14 @@ for model_name, model in models.items():
     best_model = search.best_estimator_
     best_models[model_name] = best_model
 
-    print(f"\n✅ Best Parameters for {model_name}: {search.best_params_}")
-    print(f"✅ Best Cross-Validation Score: {search.best_score_:.4f}")
-    print(f"⏱️ Time Taken: {time.time() - start_time:.2f} seconds")
+    print(f"\n Best Parameters for {model_name}: {search.best_params_}")
+    print(f" Best Cross-Validation Score: {search.best_score_:.4f}")
+    print(f" Time Taken: {time.time() - start_time:.2f} seconds")
 
     # Evaluation
     y_pred = best_model.predict(X_test)
 
-    print(f"\n📊 Evaluation Metrics for {model_name}:")
+    print(f"\n Evaluation Metrics for {model_name}:")
     accuracy = accuracy_score(y_test, y_pred)
     precision = precision_score(y_test, y_pred, average='weighted', zero_division=0)
     recall = recall_score(y_test, y_pred, average='weighted', zero_division=0)
@@ -226,7 +226,7 @@ for model_name, model in models.items():
     # Save the best model
     model_filename = f"{model_name.replace(' ', '_').lower()}_model.pkl"
     joblib.dump(best_model, model_filename)
-    print(f"💾 Saved {model_name} to '{model_filename}'")
+    print(f" Saved {model_name} to '{model_filename}'")
 
 import streamlit as st
 import joblib
@@ -248,9 +248,9 @@ feature_names = [
 st.title("🔮 Insurance Genie")
 
 st.markdown("Fill in the attributes below to get predictions for:")
-st.markdown("- 💰 Recommended Premium Range")
-st.markdown("- 📄 Best-fit Policy Type")
-st.markdown("- 🔐 Vault Eligibility")
+st.markdown("-  Recommended Premium Range")
+st.markdown("-  Best-fit Policy Type")
+st.markdown("-  Vault Eligibility")
 
 # Input form
 with st.form("prediction_form"):
@@ -291,6 +291,6 @@ if submitted:
     vault_result = "Yes" if vault_pred == 1 else "No"
 
     # Display Results
-    st.success(f"💰 **Recommended Premium Range**: {premium_pred}")
+    st.success(f" **Recommended Premium Range**: {premium_pred}")
     st.info(f"📄 **Policy Type**: {policy_pred}")
-    st.warning(f"🔐 **Vault Eligible**: {vault_result}")
+    st.warning(f" **Vault Eligible**: {vault_result}")
